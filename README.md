@@ -1,25 +1,25 @@
-# Laravel 12 Carbon Project
+# PHP_Laravel12_Use_Carbon_In_Blade_And_Controller
 
 A complete step-by-step Laravel 12 project demonstrating how to use **Carbon (PHP DateTime Library)** in different parts of a Laravel application.
 
 ---
 
-## ✨ Features
+##  Features
 
-✅ Current date, time, and day formatting  
-✅ Date manipulation (Yesterday, Tomorrow, Next Week, Last Month)  
-✅ Timezone handling (New York, London)  
-✅ Age calculation from birth date  
-✅ Future/Past date checking  
-✅ Subscription expiry tracking  
-✅ Human-readable time (`diffForHumans`)  
-✅ Blade-level Carbon usage  
-✅ Model Accessors & Scopes using Carbon  
-✅ Seeder with sample Carbon-powered data
+ Current date, time, and day formatting  
+ Date manipulation (Yesterday, Tomorrow, Next Week, Last Month)  
+ Timezone handling (New York, London)  
+ Age calculation from birth date  
+ Future/Past date checking  
+ Subscription expiry tracking  
+ Human-readable time (`diffForHumans`)  
+ Blade-level Carbon usage  
+ Model Accessors & Scopes using Carbon  
+ Seeder with sample Carbon-powered data
 
 ---
 
-## 🧰 Technologies Used
+## Technologies Used
 
 - **Laravel 12**
 - **Carbon (nesbot/carbon)**
@@ -27,13 +27,13 @@ A complete step-by-step Laravel 12 project demonstrating how to use **Carbon (PH
 - **Bootstrap 5**
 
 ---
-📸 Screenshots
+## Screenshots
 
 <img width="602" height="261" alt="image" src="https://github.com/user-attachments/assets/5f149c37-a0cd-4421-bd38-b0d1b85cfa57" />
 <img width="1634" height="441" alt="image" src="https://github.com/user-attachments/assets/b751b0b3-74f1-4c57-abd9-1b08c27535a1" />
 <img width="1722" height="674" alt="image" src="https://github.com/user-attachments/assets/f8a05680-b4d9-414f-b7ee-83b6ca851e1e" />
 
-## 🚀 Installation Steps
+## Installation Steps
 
 ### 1. Clone the Repository
 
@@ -65,7 +65,7 @@ php artisan db:seed --class=UserProfileSeeder
 6. Start the Server
 php artisan serve
 
-📚 Usage
+# Usage
 
 Visit these URLs in your browser:
 
@@ -73,7 +73,8 @@ Page	URL
 Carbon Demo Dashboard	http://localhost:8000/profiles
 Create Profile	http://localhost:8000/profiles/create
 Carbon Calculation Page	Click View Calculations button
-📂 Project Structure
+
+Project Structure
 app/
  └── Models/
       └── UserProfile.php
@@ -93,7 +94,7 @@ database/
  └── seeders/
       └── UserProfileSeeder.php
 
-🧠 Carbon Examples Used
+Carbon Examples Used
 use Carbon\Carbon;
 
 Carbon::now();
