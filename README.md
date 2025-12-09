@@ -1,4 +1,4 @@
-# Laravel 12 Carbon Date & Time Demo Project
+# Laravel 12 Carbon Project
 
 A complete step-by-step Laravel 12 project demonstrating how to use **Carbon (PHP DateTime Library)** in different parts of a Laravel application.
 
@@ -27,6 +27,11 @@ A complete step-by-step Laravel 12 project demonstrating how to use **Carbon (PH
 - **Bootstrap 5**
 
 ---
+📸 Screenshots
+
+<img width="602" height="261" alt="image" src="https://github.com/user-attachments/assets/5f149c37-a0cd-4421-bd38-b0d1b85cfa57" />
+<img width="1634" height="441" alt="image" src="https://github.com/user-attachments/assets/b751b0b3-74f1-4c57-abd9-1b08c27535a1" />
+<img width="1722" height="674" alt="image" src="https://github.com/user-attachments/assets/f8a05680-b4d9-414f-b7ee-83b6ca851e1e" />
 
 ## 🚀 Installation Steps
 
@@ -98,11 +103,3 @@ Carbon::parse('2024-01-01');
 Carbon::now()->addDays(30);
 Carbon::now('America/New_York');
 Carbon::now()->diffForHumans();
-
-📸 Screenshots
-
-<img width="602" height="261" alt="image" src="https://github.com/user-attachments/assets/5f149c37-a0cd-4421-bd38-b0d1b85cfa57" />
-<img width="1634" height="441" alt="image" src="https://github.com/user-attachments/assets/b751b0b3-74f1-4c57-abd9-1b08c27535a1" />
-<img width="1722" height="674" alt="image" src="https://github.com/user-attachments/assets/f8a05680-b4d9-414f-b7ee-83b6ca851e1e" />
-
-
