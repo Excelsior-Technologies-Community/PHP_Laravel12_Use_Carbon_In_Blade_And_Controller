@@ -53,6 +53,161 @@
 
         </div>
 
+
+                <!-- Birthday Reminder -->
+        <div class="card mb-4">
+
+            <div class="card-header bg-warning">
+                <h5 class="mb-0">
+                    Upcoming Birthday Reminders 🎂
+                </h5>
+            </div>
+
+            <div class="card-body">
+
+                @if($upcomingBirthdays->count())
+
+                    <div class="row">
+
+                        @foreach($upcomingBirthdays as $profile)
+
+                            <div class="col-md-4 mb-3">
+
+                                <div class="card shadow-sm">
+
+                                    <div class="card-body">
+
+                                        <h5>
+                                            {{ $profile->name }}
+                                        </h5>
+
+                                        <p class="mb-1">
+                                            <strong>Birthday:</strong>
+                                            {{ $profile->nextBirthday->format('d M Y') }}
+                                        </p>
+
+                                        <p class="mb-0">
+
+                                            @if($profile->birthdayStatus == 'Today')
+
+                                                <span class="badge bg-danger">
+                                                    Birthday Today 🎉
+                                                </span>
+
+                                            @elseif($profile->birthdayStatus == 'Tomorrow')
+
+                                                <span class="badge bg-warning">
+                                                    Tomorrow
+                                                </span>
+
+                                            @elseif($profile->birthdayStatus == 'This Week')
+
+                                                <span class="badge bg-info">
+                                                    This Week
+                                                </span>
+
+                                            @else
+
+                                                <span class="badge bg-success">
+                                                    {{ $profile->daysLeft }} days left
+                                                </span>
+
+                                            @endif
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        @endforeach
+
+                    </div>
+
+                @else
+
+                    <p class="text-muted">
+                        No upcoming birthdays found.
+                    </p>
+
+                @endif
+
+            </div>
+
+        </div>
+
+
+        <!-- Subscription Countdown -->
+        <div class="card mb-4">
+
+            <div class="card-header bg-info text-white">
+
+                <h5 class="mb-0">
+                    Subscription Countdown ⏳
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                @foreach($subscriptionCountdown as $profile)
+
+                    <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+
+                        <div>
+
+                            <strong>
+                                {{ $profile->name }}
+                            </strong>
+
+                            <br>
+
+                            <small>
+                                {{ \Carbon\Carbon::parse($profile->subscription_expiry)->format('d M Y') }}
+                            </small>
+
+                        </div>
+
+                        <div>
+
+                            @if($profile->remainingDays < 0)
+
+                                <span class="badge bg-danger">
+
+                                    {{ $profile->subscriptionMessage }}
+
+                                </span>
+
+                            @elseif($profile->remainingDays == 0)
+
+                                <span class="badge bg-warning">
+
+                                    {{ $profile->subscriptionMessage }}
+
+                                </span>
+
+                            @else
+
+                                <span class="badge bg-success">
+
+                                    {{ $profile->subscriptionMessage }}
+
+                                </span>
+
+                            @endif
+
+                        </div>
+
+                    </div>
+
+                @endforeach
+
+            </div>
+
+        </div>
+
         <!-- Carbon Examples -->
         <div class="row">
 
