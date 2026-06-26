@@ -73,6 +73,82 @@ class UserProfileController extends Controller
             now()
         )->count();
 
+        // ===============================
+        // Upcoming Birthday Reminders
+        // ===============================
+
+        $upcomingBirthdays = UserProfile::all()
+            ->map(function ($profile) {
+
+                $birthDate = Carbon::parse($profile->birth_date);
+
+                $nextBirthday = Carbon::create(
+                    now()->year,
+                    $birthDate->month,
+                    $birthDate->day
+                );
+
+                if ($nextBirthday->lt(now()->startOfDay())) {
+                    $nextBirthday->addYear();
+                }
+
+                $profile->nextBirthday = $nextBirthday;
+
+                $profile->daysLeft = round(
+                    now()->diffInDays($nextBirthday, false)
+                );
+
+                if ($profile->daysLeft == 0) {
+                    $profile->birthdayStatus = 'Today';
+                } elseif ($profile->daysLeft == 1) {
+                    $profile->birthdayStatus = 'Tomorrow';
+                } elseif ($profile->daysLeft <= 7) {
+                    $profile->birthdayStatus = 'This Week';
+                } else {
+                    $profile->birthdayStatus = 'Upcoming';
+                }
+
+                return $profile;
+            })
+            ->sortBy('daysLeft')
+            ->take(5);
+
+        // ===============================
+        // Subscription Countdown
+        // ===============================
+
+        $subscriptionCountdown = UserProfile::all()
+            ->map(function ($profile) {
+
+                $expiry = Carbon::parse($profile->subscription_expiry);
+
+                $profile->remainingDays = round(
+                    now()->diffInDays($expiry, false)
+                );
+
+                if ($expiry->isPast()) {
+
+                    $profile->subscriptionMessage =
+                        'Expired ' .
+                        abs($profile->remainingDays) .
+                        ' days ago';
+                } elseif ($expiry->isToday()) {
+
+                    $profile->subscriptionMessage =
+                        'Expires Today';
+                } else {
+
+                    $profile->subscriptionMessage =
+                        'Expires in ' .
+                        $profile->remainingDays .
+                        ' days';
+                }
+
+                return $profile;
+            })
+            ->sortBy('remainingDays')
+            ->values();
+
         return view(
             'profiles.index',
             compact(
@@ -95,7 +171,9 @@ class UserProfileController extends Controller
                 'profiles',
                 'totalProfiles',
                 'activeSubscriptions',
-                'expiredSubscriptions'
+                'expiredSubscriptions',
+                'upcomingBirthdays',
+                'subscriptionCountdown'
             )
         );
     }
@@ -132,38 +210,74 @@ class UserProfileController extends Controller
 
         $age = Carbon::parse($profile->birth_date)->age;
 
-        $nextBirthday = Carbon::parse($profile->birth_date)
-            ->addYears($age + 1);
+        $birthDate = Carbon::parse($profile->birth_date);
 
-        $daysUntilBirthday = now()->diffInDays(
-            $nextBirthday,
-            false
+        $nextBirthday = Carbon::create(
+            now()->year,
+            $birthDate->month,
+            $birthDate->day
         );
+
+        if ($nextBirthday->lt(now()->startOfDay())) {
+            $nextBirthday->addYear();
+        }
+
+        $daysUntilBirthday = round(
+            now()->diffInDays($nextBirthday, false)
+        );
+
+        $isBirthdayToday = $nextBirthday->isToday();
 
         $subscriptionExpiry = Carbon::parse(
             $profile->subscription_expiry
         );
 
-        $daysUntilExpiry = now()->diffInDays(
-            $subscriptionExpiry,
-            false
+        $daysUntilExpiry = round(
+            now()->diffInDays($subscriptionExpiry, false)
         );
 
-        $isSubscriptionActive = $subscriptionExpiry->isFuture();
+        $isSubscriptionActive = !$subscriptionExpiry->isPast();
+
+        if ($subscriptionExpiry->isPast()) {
+            $subscriptionMessage = 'Expired ' . abs($daysUntilExpiry) . ' days ago';
+        } elseif ($subscriptionExpiry->isToday()) {
+            $subscriptionMessage = 'Expires Today';
+        } else {
+            $subscriptionMessage = 'Expires in ' . $daysUntilExpiry . ' days';
+        }
 
         $timeSinceCreated = Carbon::parse(
             $profile->created_at
         )->diffForHumans();
+
+        $createdDate = Carbon::parse($profile->created_at)
+            ->format('F j, Y');
+
+        $accountAgeDays = round(
+            Carbon::parse($profile->created_at)
+                ->diffInDays(now())
+        );
+
+        $accountAgeMonths = round(
+            Carbon::parse($profile->created_at)
+                ->diffInMonths(now())
+        );
 
         return view(
             'profiles.calculations',
             compact(
                 'profile',
                 'age',
+                'nextBirthday',
                 'daysUntilBirthday',
+                'isBirthdayToday',
                 'daysUntilExpiry',
+                'subscriptionMessage',
                 'isSubscriptionActive',
-                'timeSinceCreated'
+                'timeSinceCreated',
+                'createdDate',
+                'accountAgeDays',
+                'accountAgeMonths'
             )
         );
     }

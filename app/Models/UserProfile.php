@@ -13,12 +13,12 @@ class UserProfile extends Model
         'birth_date',
         'subscription_expiry'
     ];
-    
+
     protected $casts = [
         'birth_date' => 'date',
         'subscription_expiry' => 'datetime',
     ];
-    
+
     /**
      * Get formatted birth date
      */
@@ -26,7 +26,7 @@ class UserProfile extends Model
     {
         return Carbon::parse($this->birth_date)->format('F j, Y');
     }
-    
+
     /**
      * Get age from birth date
      */
@@ -34,14 +34,14 @@ class UserProfile extends Model
     {
         return Carbon::parse($this->birth_date)->age;
     }
-    
+
     /**
      * Get subscription status
      */
     public function getSubscriptionStatusAttribute()
     {
         $expiry = Carbon::parse($this->subscription_expiry);
-        
+
         if ($expiry->isPast()) {
             return 'Expired';
         } elseif ($expiry->isToday()) {
@@ -50,7 +50,7 @@ class UserProfile extends Model
             return 'Active';
         }
     }
-    
+
     /**
      * Get days until subscription expiry
      */
@@ -61,7 +61,7 @@ class UserProfile extends Model
             false
         );
     }
-    
+
     /**
      * Check if subscription is active
      */
@@ -69,7 +69,7 @@ class UserProfile extends Model
     {
         return Carbon::parse($this->subscription_expiry)->isFuture();
     }
-    
+
     /**
      * Scope for active subscriptions
      */
@@ -77,7 +77,7 @@ class UserProfile extends Model
     {
         return $query->where('subscription_expiry', '>', now());
     }
-    
+
     /**
      * Scope for expired subscriptions
      */
@@ -85,12 +85,40 @@ class UserProfile extends Model
     {
         return $query->where('subscription_expiry', '<', now());
     }
-    
+
     /**
      * Scope for birthdays this month
      */
     public function scopeBirthdaysThisMonth($query)
     {
         return $query->whereMonth('birth_date', now()->month);
+    }
+
+    /**
+     * Get next birthday
+     */
+    public function getNextBirthdayAttribute()
+    {
+        $birthDate = Carbon::parse($this->birth_date);
+
+        $nextBirthday = Carbon::create(
+            now()->year,
+            $birthDate->month,
+            $birthDate->day
+        );
+
+        if ($nextBirthday->lt(now()->startOfDay())) {
+            $nextBirthday->addYear();
+        }
+
+        return $nextBirthday;
+    }
+
+    /**
+     * Days until next birthday
+     */
+    public function getDaysUntilBirthdayAttribute()
+    {
+        return now()->diffInDays($this->next_birthday, false);
     }
 }
