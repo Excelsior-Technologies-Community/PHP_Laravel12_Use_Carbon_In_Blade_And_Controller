@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\CarbonStudioController;
 
 Route::get('/', function () {
     return redirect()->route('profiles.index');
@@ -14,8 +15,12 @@ Route::get(
     [UserProfileController::class, 'showCalculations']
 )->name('profiles.calculations');
 
-Route::get('/carbon-examples', function () {
+// Carbon Studio & Date Analytics Routes
+Route::get('/carbon-studio', [CarbonStudioController::class, 'index'])->name('carbon.studio');
+Route::post('/carbon-studio/renew/{id}', [CarbonStudioController::class, 'renewSubscription'])->name('carbon.studio.renew');
+Route::get('/carbon-studio/export', [CarbonStudioController::class, 'exportDataset'])->name('carbon.studio.export');
 
+Route::get('/carbon-examples', function () {
     $now = now();
     $tomorrow = now()->addDay();
     $formattedDate = now()->format('F j, Y');

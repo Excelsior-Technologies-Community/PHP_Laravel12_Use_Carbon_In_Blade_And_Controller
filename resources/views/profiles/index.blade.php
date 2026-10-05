@@ -13,7 +13,12 @@
 
     <div class="container mt-5">
 
-        <h1 class="mb-4">Carbon Date Examples</h1>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">Carbon Date Examples</h1>
+            <a href="{{ route('carbon.studio') }}" class="btn btn-warning fw-bold shadow-sm">
+                <i class="fa-solid fa-clock-rotate-left me-1"></i> Carbon Expiry & Analytics Studio
+            </a>
+        </div>
 
         @if(session('success'))
             <div class="alert alert-success">
